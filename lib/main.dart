@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
           title: const Text('Flutter Demo'),
         ),
         body: const Center(
-          child: TapBoxA(),
+          child: ParentWidget(),
         ),
       ),
     );
@@ -80,7 +80,7 @@ class _ParentWidgetState extends State<ParentWidget> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      child: TapBoxB(
+      child: TapboxC(
         active: _active,
         onChanged: _handleTopboxChenged,
       ),
@@ -112,6 +112,74 @@ class TapBoxB extends StatelessWidget {
         child: Center(
           child: Text(
             active ? 'Active' : 'Inactive',
+            style: const TextStyle(fontSize: 32, color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+//子
+class TapboxC extends StatefulWidget {
+  final bool active;
+  final ValueChanged<bool> onChanged;
+
+  const TapboxC({
+    super.key,
+    this.active = false,
+    required this.onChanged,
+  });
+
+  @override
+  State<TapboxC> createState() => _TapBoxCState();
+}
+
+class _TapBoxCState extends State<TapboxC> {
+  bool _hithlight = false;
+
+  void _handleTopDown(TapDownDetails details) {
+    setState(() {
+      _hithlight = true;
+    });
+  }
+
+  void _handleTopUp(TapUpDetails details) {
+    setState(() {
+      _hithlight = false;
+    });
+  }
+
+  void _handleTopCancel() {
+    setState(() {
+      _hithlight = false;
+    });
+  }
+
+  void _handleTop() {
+    widget.onChanged(!widget.active);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //GestureDetectorは全てのタップイベントをリッスンする
+    //タップイベントが発生すると、その状態変化を親ウィジェットに渡し、
+    //ウェジェットプロパティを使用して適切なアクションを実行する
+    return GestureDetector(
+      onTapDown: _handleTopDown,
+      onTapUp: _handleTopUp,
+      onTap: _handleTop,
+      onTapCancel: _handleTopCancel,
+      child: Container(
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+          color: widget.active ? Colors.lightGreen[700] : Colors.grey[600],
+          border: _hithlight ? Border.all(color: Colors.teal[700]!, width: 10) : null,
+        ),
+        child: Center(
+          child: Text(
+            widget.active ? 'Active' : 'Inactive',
             style: const TextStyle(fontSize: 32, color: Colors.white),
           ),
         ),
