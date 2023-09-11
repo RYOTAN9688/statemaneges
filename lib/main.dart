@@ -61,6 +61,11 @@ class _TapBoxAState extends State<TapBoxA> {
 }
 
 //親
+//TapboxB
+//TapboxC
+//active状態を管理する
+//ボックスがタップされた時に、_handleTopboxChengedを呼ぶ
+//タップが発生し、_activeの状態が変更されると、setStateを呼び出してUIを更新する
 class ParentWidget extends StatefulWidget {
   const ParentWidget({super.key});
 
@@ -89,6 +94,7 @@ class _ParentWidgetState extends State<ParentWidget> {
 }
 
 //子
+//タップを検知すると、親に通知する
 class TapBoxB extends StatelessWidget {
   final bool active;
   final ValueChanged<bool> onChanged;
@@ -121,6 +127,8 @@ class TapBoxB extends StatelessWidget {
 }
 
 //子
+//_activeの状態は親に渡すが、
+//_highlight状態は内部で管理する
 class TapboxC extends StatefulWidget {
   final bool active;
   final ValueChanged<bool> onChanged;
